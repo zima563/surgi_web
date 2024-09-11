@@ -31,6 +31,11 @@ const login = catchError(async (req, res, next) => {
   next(new apiError("email or password incorrect", 401));
 });
 
+const getAllUser = catchError(async(req,res,next)=>{
+  let users = await userModel.findAll({attributes:["userName"]});
+  res.json({msg: "success", users});
+})
+
 const forgettingPassword = catchError(async (req, res, next) => {
   let user = await userModel.findOne({ where: { email: req.body.email } });
   if (!user) return next(new apiError("not found email", 404));
@@ -159,6 +164,7 @@ module.exports = {
   checkpinCode,
   changePassword,
   logout,
+  getAllUser,
   protectRoutes,
   allowedTo,
 };

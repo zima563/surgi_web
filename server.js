@@ -5,7 +5,7 @@ const { bootstrap } = require("./src/index.routes.js");
 
 require('./DB/models/associate.js');  // Import associations setup
 const app = express();
-const port = 3000;
+const port = 4000;
 
 sequelize.sync({ force: false});
 

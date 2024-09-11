@@ -7,8 +7,6 @@ const SequelizeFeatures = require("../../utils/apiFeatures.js");
 
 
 const addListen = catchError(async (req, res) => {
-  
-
   if (req.files) {
     req.body.images = req.files.map((val) => `https://pickapi.surgi-web.com/${val.filename}`);
   }
@@ -17,7 +15,7 @@ const addListen = catchError(async (req, res) => {
   res.status(200).json({ msg: "success", listen });
 });
 
-const publish = catchError(async (req, res, next) => {
+const publishById = catchError(async (req, res, next) => {
   let listen = await ListenModel.findByPk(req.params.id);
   if (!listen) next(new apiError("listen not found", 404));
   await ListenModel.update({ publish: true }, { where: { id: req.params.id } });
@@ -41,11 +39,7 @@ const getListensAll = catchError(async (req, res) => {
   sequelizeFeatures.paginate(countDocuments);
   let listens = await ListenModel.findAll({
     ...sequelizeQuery,
-  include: [{
-    model: userModel,
-    as: "agent",
-    attributes: ["userName"]
-  }]});
+  });
 
   // Parse the images field from string to array for each listen object
   for (let listen of listens) {
@@ -85,11 +79,7 @@ const getListens = catchError(async (req, res) => {
   
     let listens = await ListenModel.findAll({
     ...sequelizeQuery,
-  include: [{
-    model: userModel,
-    as: "agent",
-    attributes: ["userName"]
-  }]});
+  });
 
   // Parse the images field from string to array for each listen object
   for (let listen of listens) {
@@ -137,7 +127,6 @@ const deleteListen = catchError(async (req, res, next) => {
 
 module.exports = {
   addListen,
-  publish,
   getListen,
   getListens,
   getListensAll,

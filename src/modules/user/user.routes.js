@@ -10,6 +10,7 @@ const {
   resetPassword,
   userProfile,
   allowedTo,
+  getAllUser,
 } = require("./user.controller.js");
 
 const {
@@ -30,6 +31,7 @@ userRouter
   .route("/register")
   .post(validation(registerVal), emailExists, register);
 userRouter.route("/login").post(validation(loginVal), login);
+userRouter.route("/all").get(getAllUser);
 userRouter
   .route("/forgettingPassword")
   .post(validation(forgettingPasswordValidator), forgettingPassword);

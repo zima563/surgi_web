@@ -7,7 +7,6 @@ const {
   deleteListen,
   getListen,
   getListens,
-  publish,
   updateListen,
   getListensAll,
 } = require("./listen.controller.js");
@@ -25,9 +24,7 @@ listenRouter
   .route("/all")
   .get( getListensAll);
 
-listenRouter
-  .route("/publish/:id")
-  .patch(publish);
+
 
 listenRouter
   .route("/:id")
