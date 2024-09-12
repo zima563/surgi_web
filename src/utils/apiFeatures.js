@@ -63,6 +63,14 @@ class SequelizeFeatures {
             },
           ],
         };
+      }else if(model === "locationModel"){
+        query = {
+          [Op.or]: [
+            {
+              name: { [Op.like]: `%${this.searchQuery.keyword}%` },
+            },
+          ],
+        };
       } else {
         return this;
       }

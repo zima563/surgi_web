@@ -2,6 +2,7 @@ const locationModel = require("../../../DB/models/locations");
 const locationSchema = require("../../../DB/models/locations");
 const { catchError } = require("../../middlewares/catchError");
 const apiError = require("../../utils/apiError");
+const SequelizeFeatures = require("../../utils/apiFeatures");
 
 
 
@@ -10,12 +11,29 @@ const addLocation = catchError(async(req,res,next)=>{
     res.json({msg: "success" , location});
 })
 
-const getLocations = catchError(async(req,res,next)=>{
-    let locations = await locationModel.findAll({
-        attributes: ["name"]
-    })
-    res.json({msg: "success", locations});
-})
+
+
+const getLocations = catchError(async (req, res) => {
+    let sequelizeFeatures = new SequelizeFeatures(locationModel, req.query)
+      .filter() // Apply filtering criteria
+      .sort() // Apply sorting criteria
+      .search("locationModel") // Apply search criteria
+      .limitedFields(); // Select specific fields to return
+  
+  
+      const { sequelizeQuery } = sequelizeFeatures;
+  
+
+    
+      let locations = await locationModel.findAll({
+      ...sequelizeQuery,
+    });
+  
+    res.json({
+      msg: "success",
+      locations,
+    });
+  });
 
 const updateLocation = catchError(async(req,res,next)=>{
     let location = await locationModel.update(req.body,{
