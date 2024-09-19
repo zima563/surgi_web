@@ -16,24 +16,26 @@ const listenRouter = express.Router();
 
 listenRouter
   .route("/add")
-  .post(uploadArrayOfFiles("images"),validation(addListenVal), addListen);
+  .post(protectRoutes, allowedTo("admin"), uploadArrayOfFiles("images"), validation(addListenVal), addListen);
 
 listenRouter.route("/allpublish").get(getListens);
 
 listenRouter
   .route("/all")
-  .get( getListensAll);
+  .get(protectRoutes, allowedTo("admin"), getListensAll);
 
 
 
 listenRouter
   .route("/:id")
-  .get(getListen)
+  .get(protectRoutes, allowedTo("admin"), getListen)
   .put(
+    protectRoutes, allowedTo("admin"),
+    uploadArrayOfFiles("images"),
     validation(updateListenVal),
     updateListen
   )
-  .delete( deleteListen);
+  .delete(protectRoutes, allowedTo("admin"), deleteListen);
 
 
-  module.exports = listenRouter;
+module.exports = listenRouter;

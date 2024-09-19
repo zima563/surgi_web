@@ -59,7 +59,7 @@ class SequelizeFeatures {
         query = {
           [Op.or]: [
             {
-              propertyLocation: { [Op.like]: `%${this.searchQuery.keyword}%` },
+              Reference: { [Op.like]: `%${this.searchQuery.keyword}%` },
             },
           ],
         };
@@ -71,7 +71,16 @@ class SequelizeFeatures {
             },
           ],
         };
-      } else {
+      }else if(model === "userModel"){
+        query = {
+          [Op.or]: [
+            {
+              userName: { [Op.like]: `%${this.searchQuery.keyword}%` },
+            },
+          ],
+        };
+      }
+       else {
         return this;
       }
 

@@ -2,7 +2,8 @@ const Jwt = require("jsonwebtoken");
 const userModel = require("../../../DB/models/user.model.js");
 const { catchError } = require("../../middlewares/catchError.js");
 const  apiError  = require("../../utils/apiError.js");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const SequelizeFeatures = require("../../utils/apiFeatures.js");
 // const sendEmailPcode = require("../../services/email/sendEmailPinCode.js");
 
 const register = catchError(async (req, res, next) => {
@@ -32,8 +33,23 @@ const login = catchError(async (req, res, next) => {
 });
 
 const getAllUser = catchError(async(req,res,next)=>{
-  let users = await userModel.findAll({attributes:["userName"]});
-  res.json({msg: "success", users});
+  let sequelizeFeatures = new SequelizeFeatures(userModel, req.query)
+    .filter() // Apply filtering criteria
+    .sort() // Apply sorting criteria
+    .search("userModel") // Apply search criteria
+    .limitedFields(); // Select specific fields to return
+
+
+    const { sequelizeQuery } = sequelizeFeatures;
+
+    let users = await userModel.findAll({
+    ...sequelizeQuery,
+  });
+
+  res.json({
+    msg: "success",
+    users,
+  });
 })
 
 const forgettingPassword = catchError(async (req, res, next) => {

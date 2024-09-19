@@ -1,6 +1,6 @@
-const multer = require ("multer");
+const multer = require("multer");
 const { v4: uuidv4 } = require('uuid');
-const { apiError } = require ("../utils/apiError.js");
+const { apiError } = require("../utils/apiError.js");
 
 const fileUpload = () => {
   const storage = multer.diskStorage({

@@ -1,17 +1,26 @@
+const sharp = require("sharp");
 const ListenModel = require("../../../DB/models/listen.model.js");
 const userModel = require("../../../DB/models/user.model.js");
 const { catchError } = require("../../middlewares/catchError.js");
 const apiError = require("../../utils/apiError.js");
 const SequelizeFeatures = require("../../utils/apiFeatures.js");
 
-
-
 const addListen = catchError(async (req, res) => {
   if (req.files) {
-    req.body.images = req.files.map((val) => `https://pickapi.surgi-web.com/${val.filename}`);
+    const resizedFilename = `${Date.now()}-${file.originalname}`;
+    const outputPath = path.join("uploads", resizedFilename);
+
+    req.body.images = await Promise.all(req.files.map(async (file) => {
+      await sharp(file.buffer)
+        .resize(1400, 900)
+        .toFile(outputPath);
+
+      return `https://pickapi.surgi-web.com/${resizedFilename}}`;
+    }));
   }
+
   let listen = await ListenModel.create(req.body);
-  
+
   res.status(200).json({ msg: "success", listen });
 });
 
@@ -30,7 +39,7 @@ const getListensAll = catchError(async (req, res) => {
     .limitedFields(); // Select specific fields to return
 
 
-    const { sequelizeQuery } = sequelizeFeatures;
+  const { sequelizeQuery } = sequelizeFeatures;
 
   // Count the number of documents that match the modified query
   const countDocuments = await ListenModel.count({ where: sequelizeQuery.where });
@@ -64,9 +73,9 @@ const getListens = catchError(async (req, res) => {
     .limitedFields(); // Select specific fields to return
 
 
-    const { sequelizeQuery } = sequelizeFeatures;
+  const { sequelizeQuery } = sequelizeFeatures;
 
-      // Add condition to filter where publish is true
+  // Add condition to filter where publish is true
   sequelizeQuery.where = {
     ...sequelizeQuery.where,
     publish: true,
@@ -76,8 +85,8 @@ const getListens = catchError(async (req, res) => {
 
   // Paginate based on the filtered document count
   sequelizeFeatures.paginate(countDocuments);
-  
-    let listens = await ListenModel.findAll({
+
+  let listens = await ListenModel.findAll({
     ...sequelizeQuery,
   });
 
@@ -103,7 +112,33 @@ const getListen = catchError(async (req, res, next) => {
 });
 
 const updateListen = catchError(async (req, res, next) => {
-  let updateDocumentCount = await ListenModel.update(req.body, {
+  // Array to hold image URLs
+  let imageUrls = [];
+
+  // Process uploaded files and generate URLs
+  if (req.files) {
+    const resizedFilename = `${Date.now()}-${file.originalname}`;
+    const outputPath = path.join("uploads", resizedFilename);
+
+    imageUrls = await Promise.all(req.files.map(async (file) => {
+      await sharp(file.buffer)
+        .resize(1400, 900)
+        .toFile(outputPath);
+
+      return `https://pickapi.surgi-web.com/${resizedFilename}}`;
+    }));
+  }
+
+  // Extract URLs from the body (assuming they are also under "images")
+  if (req.body.images) {
+    const urlsFromBody = Array.isArray(req.body.images) ? req.body.images : [req.body.images];
+    imageUrls = imageUrls.concat(urlsFromBody.filter(item => item.startsWith('http')));
+  }
+
+  // Prepare data for update
+  const updateData = { ...req.body, images: imageUrls };
+
+  let updateDocumentCount = await ListenModel.update(updateData, {
     where: { id: req.params.id },
   });
   if (updateDocumentCount === 0) {

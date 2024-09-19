@@ -31,7 +31,7 @@ userRouter
   .route("/register")
   .post(validation(registerVal), emailExists, register);
 userRouter.route("/login").post(validation(loginVal), login);
-userRouter.route("/all").get(getAllUser);
+userRouter.route("/all").get(protectRoutes, allowedTo("admin"), getAllUser);
 userRouter
   .route("/forgettingPassword")
   .post(validation(forgettingPasswordValidator), forgettingPassword);
@@ -45,11 +45,11 @@ userRouter
   .route("/changePassword")
   .patch(
     protectRoutes,
-    allowedTo(), 
+    allowedTo(),
     validation(changePasswordValidator),
     changePassword
   );
-userRouter.route("/profile").get(protectRoutes, allowedTo("admin" , "user"), userProfile);
-userRouter.route("/logOut").patch(protectRoutes, allowedTo("admin" , "user"), logout);
+userRouter.route("/profile").get(protectRoutes, allowedTo("admin", "user"), userProfile);
+userRouter.route("/logOut").patch(protectRoutes, allowedTo("admin", "user"), logout);
 
 module.exports = userRouter;
