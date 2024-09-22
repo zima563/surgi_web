@@ -51,7 +51,7 @@ const ListenModel = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      trim: true, 
+      trim: true,
     },
     Available: {
       type: DataTypes.DATE,
@@ -103,7 +103,7 @@ const ListenModel = sequelize.define(
         max: 999,
       },
     },
-    floorNumber:{
+    floorNumber: {
       type: DataTypes.INTEGER,
       validate: {
         min: 0,
@@ -152,7 +152,7 @@ const ListenModel = sequelize.define(
     publish: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-    }, 
+    },
     downPayment: {
       type: DataTypes.FLOAT,
       allowNull: true,  // Conditional logic will handle this in the logic layer

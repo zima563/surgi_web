@@ -5,10 +5,10 @@ const userRouter = require("./modules/user/user.routes.js");
 const apiError = require("./utils/apiError.js");
 
 exports.bootstrap = (app) => {
-
-  app.use("/api/users",userRouter);
-  app.use("/api/listens",listenRouter);
-  app.use("/api/locations",locationRouter);
+  // HTTPS://localhost:4000//api/users
+  app.use("/api/users", userRouter);
+  app.use("/api/listens", listenRouter);
+  app.use("/api/locations", locationRouter);
   app.get("/", (req, res) => res.send("Hello World!"));
   app.use("*", (req, res, next) => {
     next(new apiError(`not found endPoint : ${req.originalUrl}`, 404));

@@ -54,10 +54,11 @@ const addListenVal = Joi.object({
         mimetype: Joi.string()
           .valid("image/png", "image/jpg", "image/jpeg")
           .required(),
-        destination: Joi.string().required(),
-        filename: Joi.string().required(),
-        path: Joi.string().required(),
+        // destination: Joi.string().required(),
+        // filename: Joi.string().required(),
+        // path: Joi.string().required(),
         size: Joi.number().max(5242880).required(),
+        buffer: Joi.any(),
       })
     )
     .min(0).required(),

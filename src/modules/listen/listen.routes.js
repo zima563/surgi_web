@@ -11,12 +11,13 @@ const {
   getListensAll,
 } = require("./listen.controller.js");
 const { uploadArrayOfFiles, uploadFieldsOfFiles } = require("../../fileUpload/upload.js");
+const { referenceExists } = require("../../middlewares/listenExist.js");
 
 const listenRouter = express.Router();
 
 listenRouter
   .route("/add")
-  .post(protectRoutes, allowedTo("admin"), uploadArrayOfFiles("images"), validation(addListenVal), addListen);
+  .post(protectRoutes, allowedTo("admin"), uploadArrayOfFiles("images"), referenceExists, validation(addListenVal), addListen);
 
 listenRouter.route("/allpublish").get(getListens);
 

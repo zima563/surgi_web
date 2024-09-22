@@ -1,21 +1,23 @@
 const sharp = require("sharp");
+const { v4: uuidv4 } = require('uuid');
 const ListenModel = require("../../../DB/models/listen.model.js");
 const userModel = require("../../../DB/models/user.model.js");
 const { catchError } = require("../../middlewares/catchError.js");
 const apiError = require("../../utils/apiError.js");
 const SequelizeFeatures = require("../../utils/apiFeatures.js");
+const path = require("path")
 
 const addListen = catchError(async (req, res) => {
   if (req.files) {
-    const resizedFilename = `${Date.now()}-${file.originalname}`;
-    const outputPath = path.join("uploads", resizedFilename);
-
     req.body.images = await Promise.all(req.files.map(async (file) => {
+
+      const resizedFilename = `${encodeURIComponent(file.originalname)}`;
+      const outputPath = path.join("uploads", resizedFilename);
       await sharp(file.buffer)
         .resize(1400, 900)
         .toFile(outputPath);
 
-      return `https://pickapi.surgi-web.com/${resizedFilename}}`;
+      return `https://pickapi.surgi-web.com/uploads/${resizedFilename}`;
     }));
   }
 
@@ -117,15 +119,16 @@ const updateListen = catchError(async (req, res, next) => {
 
   // Process uploaded files and generate URLs
   if (req.files) {
-    const resizedFilename = `${Date.now()}-${file.originalname}`;
-    const outputPath = path.join("uploads", resizedFilename);
 
     imageUrls = await Promise.all(req.files.map(async (file) => {
+
+      const resizedFilename = `${encodeURIComponent(file.originalname)}`;
+      const outputPath = path.join("uploads", resizedFilename);
       await sharp(file.buffer)
         .resize(1400, 900)
         .toFile(outputPath);
 
-      return `https://pickapi.surgi-web.com/${resizedFilename}}`;
+      return `https://pickapi.surgi-web.com/uploads/${resizedFilename}`;
     }));
   }
 
