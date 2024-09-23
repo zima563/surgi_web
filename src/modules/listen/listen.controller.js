@@ -12,7 +12,9 @@ const addListen = catchError(async (req, res) => {
 
     req.body.images = await Promise.all(req.files.map(async (file) => {
       // Clean up filename by replacing spaces with underscores (optional)
-      const cleanedFilename = file.originalname.replace(/\s+/g, '_');
+      let cleanedFilename = file.originalname
+        .replace(/\s+/g, '_')          // Replace spaces with underscores
+        .replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ''); // Remove unsafe characters (optional)
 
       const resizedFilename = encodeURIComponent(cleanedFilename);
       const outputPath = path.join("uploads", resizedFilename);
