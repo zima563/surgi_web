@@ -14,7 +14,7 @@ const addListen = catchError(async (req, res) => {
       // Clean up filename by replacing spaces with underscores (optional)
       let cleanedFilename = file.originalname
         .replace(/\s+/g, '_')          // Replace spaces with underscores
-        .replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ''); // Remove unsafe characters (optional)
+        .replace(/[^a-zA-Z0-9_.]/g, ''); // Remove all special characters except letters, numbers, underscores, and dots
 
       const resizedFilename = encodeURIComponent(cleanedFilename);
       const outputPath = path.join("uploads", resizedFilename);
@@ -132,7 +132,7 @@ const updateListen = catchError(async (req, res, next) => {
       // Clean up filename by replacing spaces with underscores (optional)
       let cleanedFilename = file.originalname
         .replace(/\s+/g, '_')          // Replace spaces with underscores
-        .replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ''); // Remove unsafe characters (optional)
+        .replace(/[^a-zA-Z0-9_.]/g, ''); // Remove all special characters except letters, numbers, underscores, and dots
 
 
       const resizedFilename = encodeURIComponent(cleanedFilename);
