@@ -14,7 +14,7 @@ const addListen = catchError(async (req, res) => {
       // Clean up filename by replacing spaces with underscores (optional)
       const cleanedFilename = file.originalname.replace(/\s+/g, '_');
 
-      const resizedFilename = encodeURIComponent(file.originalname);
+      const resizedFilename = encodeURIComponent(cleanedFilename);
       const outputPath = path.join("uploads", resizedFilename);
       await sharp(file.buffer)
         .resize(1400, 900)
