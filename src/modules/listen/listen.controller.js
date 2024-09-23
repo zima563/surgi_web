@@ -5,13 +5,14 @@ const userModel = require("../../../DB/models/user.model.js");
 const { catchError } = require("../../middlewares/catchError.js");
 const apiError = require("../../utils/apiError.js");
 const SequelizeFeatures = require("../../utils/apiFeatures.js");
-const path = require("path")
+const path = require("path");
 
 const addListen = catchError(async (req, res) => {
   if (req.files) {
+
     req.body.images = await Promise.all(req.files.map(async (file) => {
 
-      const resizedFilename = `${encodeURIComponent(file.originalname)}`;
+      const resizedFilename = encodeURIComponent(file.originalname);
       const outputPath = path.join("uploads", resizedFilename);
       await sharp(file.buffer)
         .resize(1400, 900)
@@ -20,6 +21,8 @@ const addListen = catchError(async (req, res) => {
       return `https://pickapi.surgi-web.com/uploads/${resizedFilename}`;
     }));
   }
+
+
 
   let listen = await ListenModel.create(req.body);
 
@@ -122,7 +125,7 @@ const updateListen = catchError(async (req, res, next) => {
 
     imageUrls = await Promise.all(req.files.map(async (file) => {
 
-      const resizedFilename = `${encodeURIComponent(file.originalname)}`;
+      const resizedFilename = encodeURIComponent(file.originalname);
       const outputPath = path.join("uploads", resizedFilename);
       await sharp(file.buffer)
         .resize(1400, 900)
