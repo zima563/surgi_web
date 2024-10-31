@@ -1,12 +1,11 @@
 const bcrypt = require("bcrypt");
 const { sequelize } = require("../dbConnection.js");
 const { DataTypes } = require("sequelize");
-const ListenModel = require("./listen.model.js");
 
 const userModel = sequelize.define(
   "user",
   {
-    id:{
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -14,7 +13,6 @@ const userModel = sequelize.define(
     userName: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      unique: true,
     },
     email: {
       type: DataTypes.STRING,
