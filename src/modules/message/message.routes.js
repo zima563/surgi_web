@@ -8,4 +8,6 @@ const messageRouter = express.Router();
 
 messageRouter.route("/").post(validation(messageValidationSchema), addMessage).get(protectRoutes, allowedTo("admin"), getAllMessage);
 
+
+
 module.exports = messageRouter;
