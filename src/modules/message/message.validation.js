@@ -1,4 +1,3 @@
-// messageValidation.js
 const Joi = require("joi");
 
 const messageValidationSchema = Joi.object({
@@ -10,7 +9,7 @@ const messageValidationSchema = Joi.object({
             "string.base": "First name must be a string",
             "string.empty": "First name is required",
             "string.min": "First name must be at least 2 characters",
-            "string.max": "First name must be at most 30 characters",
+            "string.max": "First name must be at most 50 characters", // Adjusted max length
         }),
     lastName: Joi.string()
         .min(2)
@@ -20,7 +19,7 @@ const messageValidationSchema = Joi.object({
             "string.base": "Last name must be a string",
             "string.empty": "Last name is required",
             "string.min": "Last name must be at least 2 characters",
-            "string.max": "Last name must be at most 30 characters",
+            "string.max": "Last name must be at most 50 characters", // Adjusted max length
         }),
     phone: Joi.string()
         .pattern(/^[0-9]+$/)
@@ -33,6 +32,13 @@ const messageValidationSchema = Joi.object({
             "string.min": "Phone number must be at least 10 digits",
             "string.max": "Phone number must be at most 15 digits",
         }),
+    email: Joi.string()
+        .email()
+        .required()
+        .messages({
+            "string.empty": "Email is required",
+            "string.email": "Email must be a valid email address",
+        }),
     message: Joi.string()
         .min(5)
         .max(2500)
@@ -40,7 +46,7 @@ const messageValidationSchema = Joi.object({
         .messages({
             "string.empty": "Message is required",
             "string.min": "Message must be at least 5 characters",
-            "string.max": "Message must be at most 500 characters",
+            "string.max": "Message must be at most 2500 characters", // Adjusted max length
         }),
 });
 
