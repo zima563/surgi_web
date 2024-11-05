@@ -6,7 +6,7 @@ const { protectRoutes, allowedTo } = require("../user/user.controller");
 
 const messageRouter = express.Router();
 
-messageRouter.route("/").post(addMessage).get(protectRoutes, allowedTo("admin"), getAllMessage);
+messageRouter.route("/").post(validation(messageValidationSchema), addMessage).get(protectRoutes, allowedTo("admin"), getAllMessage);
 
 
 
