@@ -4,7 +4,7 @@ const { sequelize } = require("./DB/dbConnection.js");
 const { bootstrap } = require("./src/index.routes.js");
 const path = require('path')
 const app = express();
-const port = 4000;
+const port = process.env.PORT
 
 sequelize.sync({ force: false });
 
